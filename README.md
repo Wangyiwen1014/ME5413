@@ -63,7 +63,7 @@ sudo apt-get install ros-noetic-navigation
 
 #### 3.1.1 Build
 ```
-cd ~/ME5413_Final_Project
+cd ~/ME5413
 catkin_make
 ```
 Add `source ~/ME5413/devel/setup.bash` to your `.bashrc` file.
