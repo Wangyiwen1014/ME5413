@@ -1,22 +1,22 @@
 <launch>
 <node pkg="pcd2pgm" name="pcd2pgm" type="pcd2pgm" output="screen">
-<!-- 存放pcd文件的路径-->
+<!-- Path for pcd file-->
 <param name="file_directory" value= "/home/tang/" />
-<!-- pcd文件名称-->
+<!-- pcd file name-->
 <param name="file_name" value= "my_map_fastlio" /> 
-<!-- 选取的范围　最小的高度-->
+<!-- Minimum chosen height-->
 <param name="thre_z_min" value= "0.55" />
-<!-- 选取的范围　最大的高度-->
+<!-- Maximum chosen height-->
 <param name="thre_z_max" value= "0.9" />  
-<!--0 选取高度范围内的，１选取高度范围外的-->
+<!--0 Chosen within range，１ chosen outside range-->
 <param name="flag_pass_through" value= "0" />
-<!-- 半径滤波的半径-->
+<!-- Radius of radius filter-->
 <param name="thre_radius" value= "0.1"/>
-<!-- 半径滤波的要求点数个数-->
+<!-- Point required by radius filter-->
 <param name="thres_point_count" value= "10" />
-<!-- 存储的栅格map的分辨率-->
+<!-- Grid map resolution-->
 <param name="map_resolution" value= "0.05"/>
-<!-- 转换后发布的二维地图的topic，默认使用map即可，可使用map_server保存-->
+<!-- Transformed grid map topic, default 'map', or to use map_server-->
 <param name="map_topic_name" value= "map" />
 </node>
 
