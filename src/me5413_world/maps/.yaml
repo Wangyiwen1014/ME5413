@@ -1,0 +1,7 @@
+image: /home/wang/ME5413_Final_Project/src/me5413_world/maps/.pgm
+resolution: 0.050000
+origin: [-1.358767, -15.514669, 0.000000]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
+

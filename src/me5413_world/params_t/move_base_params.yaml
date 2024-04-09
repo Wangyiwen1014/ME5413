@@ -1,0 +1,73 @@
+shutdown_costmaps: true
+
+oscillation_timeout: 0.0
+oscillation_distance: 0.5
+
+#recovery_behavior_enabled: true
+#clearing_rotation_allowed: true
+recovery_behaviors:
+
+  - name: 'conservative_reset'
+
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+
+  #- name: 'aggressive_reset'
+
+  #  type: 'clear_costmap_recovery/ClearCostmapRecovery'
+
+  #- name: 'super_reset'
+
+  #  type: 'clear_costmap_recovery/ClearCostmapRecovery'
+
+  - name: 'clearing_rotation'
+
+    type: 'rotate_recovery/RotateRecovery'
+
+    #- name: 'move_slow_and_clear'
+
+    #type: 'move_slow_and_clear/MoveSlowAndClear'
+
+
+# 向机器人底盘cmd_vel发送命令的频率
+
+controller_frequency: 5.0 
+
+# 空间清理操作执行前，路径规划器等待有效控制命令的时间
+
+planner_patience: 5.0 
+
+# 空间清理操作执行前，控制器等待有效控制命令的时间
+
+controller_patience: 15.0 
+
+# 仅当默认恢复行为用于 move_base 时才使用此参数。
+
+conservative_reset_dist: 3.0 
+
+# 是否启用move_base恢复行为以尝试清除空间。
+
+recovery_behavior_enabled: true
+
+# 机器人是否采用原地旋转的运动方式清理空间,此参数仅在使用默认恢复行为时使用。
+
+clearing_rotation_allowed: true
+
+# 当move_base进入inactive状态时，是否停用节点的costmap
+
+shutdown_costmaps: false 
+
+# 执行恢复操作之前允许震荡的时间，0代表永不超时
+
+oscillation_timeout: 10.0 
+
+# 机器人需要移动该距离才可当做没有震荡。移动完毕后重置定时器参数
+
+oscillation_distance: 0.2 
+
+# 全局路径规划器循环速率。
+
+planner_frequency: 5.0 
+
+#在执行恢复行为之前允许计划重试的次数。值-1.0对应于无限次重试。
+
+max_planning_retries: -1.0

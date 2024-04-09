@@ -1,0 +1,11 @@
+<launch>
+    <!-- Launch image_process.py -->
+    <node name="image_process_node" pkg="image_cv" type="image_process.py" output="screen"/>
+
+    <!-- Launch planning.py -->
+    <node name="planning_node" pkg="image_cv" type="planning.py" output="screen"/>
+
+    <!-- Launch gui.py -->
+    <!-- node name="gui_node" pkg="image_cv" type="rosrun" args="image_cv gui.py" output="screen"/-->
+</launch>
+
