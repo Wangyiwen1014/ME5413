@@ -28,7 +28,7 @@ The **aim** of the project is to design a robot navigation software stack that :
   * Random Box: 1, 2, 3, 4
   * Delivery Vehicle 1, 2, 3
 
-Two main tasks included: **Mapping** & **Navigation**
+Three main tasks included: **Mapping**, **Navigation** & **Object Tracking**.
 
 <h2 id="2"> 2. Prerequisites</h2>
 
@@ -66,7 +66,7 @@ sudo apt-get install ros-noetic-navigation
 cd ~/ME5413_Final_Project
 catkin_make
 ```
-Add `source ~/ME5413_Final_Project/devel/setup.bash` to your `.bashrc` file
+Add `source ~/ME5413/devel/setup.bash` to your `.bashrc` file.
 
 #### 3.1.2 Run FAST-LIO
 ```
