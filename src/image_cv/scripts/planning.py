@@ -14,11 +14,11 @@ from tf.transformations import quaternion_from_euler
 
 # 定义路径的角点坐标和朝向
 points = [    
-    {'x': 17, 'y': -4.0, 'yaw': 1.57},  # 左下角，面向北
-    {'x': 17, 'y': 1.4, 'yaw': 1.57},  # 右下角，面向西
-    {'x': 7.2, 'y': 1.4, 'yaw': -3.14},  # 右上角，面向南
-    {'x': 7.2, 'y': -6.7, 'yaw': -1.57},   # 左上角，面向东
-    {'x': 15.2, 'y': -6.7, 'yaw': 0.0}  # 新增的第四个点
+    {'x': 17, 'y': -4.5, 'yaw': 1.57},  
+    {'x': 17, 'y': 1.4, 'yaw': 1.57},  
+    {'x': 7.2, 'y': 1.4, 'yaw': -3.14},  
+    {'x': 7.2, 'y': -6.7, 'yaw': -1.57},   
+    {'x': 15.4, 'y': -6.7, 'yaw': 0.0}  
 ]
 
 # 需要行走的路径索引，基于点的索引
@@ -56,23 +56,23 @@ def stop_callback(msg):
             x_pos = float(x_pos_str.split()[0])
             y_pos = float(y_pos_str.split()[0])
             # 根据路径段和方块的相对位置调整坐标
-            X = 0.3 #0.8
+            X = 0.4 #0.8
             # distance = abs(distance)
             
             if current_path_index == 0:  # 0-1路径
                 target_x = x_pos - (distance - X)
-                target_y = y_pos 
+                target_y = y_pos
                 yaw = 1.57
             elif current_path_index == 1:  # 1-2路径
-                target_x = x_pos 
+                target_x = x_pos
                 target_y = y_pos - (distance - X)
                 yaw = -3.14
             elif current_path_index == 2:  # 2-3路径
                 target_x = x_pos + (distance - X)
-                target_y = y_pos 
+                target_y = y_pos
                 yaw = -1.57
             elif current_path_index == 3:  # 3-4路径
-                target_x = x_pos 
+                target_x = x_pos
                 target_y = y_pos + (distance - X)
                 yaw = 0
                 
@@ -132,12 +132,23 @@ def navigate_to_point(x, y, yaw):
     else:
         rospy.loginfo("Failed to reach the point.")
          
+         
+#def odometry_callback(msg):
+    #global current_pose
+    #current_pose = msg.pose.pose
+    
+    
 # 订阅停止话题
 rospy.Subscriber('/signal', String, stop_callback)
 
 navigate_to_point(points[0]['x'], points[0]['y'], points[0]['yaw'])
 rospy.sleep(0.5)
 
+# 位置校正
+#current_pose = None  # 用于存储当前机器人的位置和姿态信息
+#rospy.Subscriber("/odometry/filtered", String, odom_callback)
+
+    
 # 定义目标点的位置和朝向
 for idx, (start, end) in enumerate(paths):
     current_path_index = idx
@@ -145,7 +156,9 @@ for idx, (start, end) in enumerate(paths):
     if idx == 0 and image_process_proc is None:
         image_process_path = os.path.join(os.path.dirname(__file__), 'image_process.py')
         image_process_proc = subprocess.Popen(['python3', image_process_path])
+        
     # 导航到预定路径点并输出日志
+    rospy.sleep(0.5)
     navigate_to_point(points[end]['x'], points[end]['y'], points[end]['yaw'])
     rospy.sleep(0.5)  # 稍微延迟，确保日志信息的输出有序
     if stop_at_next_point:
