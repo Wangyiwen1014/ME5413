@@ -79,7 +79,7 @@ roslaunch me5413_world mapping_fastlio.launch
 # If you want to use A-LOAM
 roslaunch me5413_world mapping_aloam.launch
 ```
-<img src="media/fastlio.png" width="500" alt="fastlio_mapping_result"/>
+<img src="media/fastlio.png"  alt="fastlio_mapping_result"/>
 
 #### 3.1.3 Convert pcd pointcloud to grid map
 
@@ -92,7 +92,7 @@ roslaunch pcd2pgm run.launch
 rosrun map_server map_saver
 ```   
 
-<img src="media/map.png" width="150" alt="2d_map"/>
+<img src="media/map.png"  alt="2d_map"/>
 
 #### 3.1.4 EVO evaluation
 ```
@@ -102,7 +102,7 @@ rosbag record /gazebo/ground_truth/state /Odometry -o EVO_perform.bag
 #Using EVO to evaluate the mapping performence 
 evo_ape bag EVO_perform.bag /gazebo/ground_truth/state /Odometry -r full -va --plot --plot_mode xy
 
-<img src="media/EVO.png" width="500" alt="evo"/>
+<img src="media/EVO.png"  alt="evo"/>
 
 
 
@@ -126,9 +126,12 @@ roslaunch me5413_world world.launch
 roslaunch me5413_world navigation.launch
 ``` 
 Click "Assembly Line 2" or "Vehicle 3", you a seen a planned global and local path
-<img src="media/gloabal-Astar.png" width="500" alt="naviagation_by_Astar"/>
+<img src="media/gloabal-Astar.png" width="800" alt="naviagation_by_Astar"/>
 
-Click "Box 2", you can seen Jackal move to a preset point and start object tracking
+
+Click "Box 1", you can seen Jackal move to a preset point and start object tracking
+Then click "Box 2", you can see a new terminal displaying robot position and tracking result of box 2. After correct recognition, Jackal would go directly to box 2.
+
 <img src="media/object_recognition.png" width="500" alt="object tracking"/>
 
 <h2 id="4"> Acknowledge</h2>
