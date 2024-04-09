@@ -12,7 +12,7 @@ from std_msgs.msg import String
 from nav_msgs.msg import Odometry
 from tf.transformations import quaternion_from_euler
 
-# 定义路径的角点坐标和朝向
+# Define trajectory coordinates and yaw angle
 points = [    
     {'x': 17, 'y': -4.5, 'yaw': 1.57},  
     {'x': 17, 'y': 1.4, 'yaw': 1.57},  
@@ -21,64 +21,63 @@ points = [
     {'x': 15.4, 'y': -6.7, 'yaw': 0.0}  
 ]
 
-# 需要行走的路径索引，基于点的索引
+# Index for path to be followed
 paths = [(0, 1), (1, 2), (2, 3), (3, 4)]
 
 
-# 初始化ROS节点
+# Initialize node
 rospy.init_node('navigate_through_points')
 
-# 创建move_base动作客户端
+# move_base action client
 client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
 client.wait_for_server()
 
-# 创建子进程对象
 image_process_proc = None
 
-# 是否在下一个点停下
+# Flag for whether to stop at next point
 stop_at_next_point = False
 current_path_index = 0  # Track current path index
 First_flag = 'False'
 
-# 话题回调函数，接收停止信号
+# Call back function, to stop receive signals
 def stop_callback(msg):
     global stop_at_next_point, current_path_index, First_flag
-    # 检查消息是否包含距离信息
+    # Check whether message have distance message
     if 'Distance' in msg.data and First_flag == 'False':
         try:
-            # 提取距离信息
+            # Extract distance
             parts = msg.data.split(',')
             distance_str = parts[0].split(':')[1].strip() 
             distance = float(distance_str.split()[0])
-            # 提取小车当前位置信息
+            # Extract curren location
             x_pos_str = parts[1].split('=')[1].strip()
             y_pos_str = parts[2].split('=')[1].strip()
             x_pos = float(x_pos_str.split()[0])
             y_pos = float(y_pos_str.split()[0])
-            # 根据路径段和方块的相对位置调整坐标
+            # Adjust coordinate according to relative position
             X = 0.4 #0.8
             # distance = abs(distance)
             
-            if current_path_index == 0:  # 0-1路径
+            if current_path_index == 0:  # 0-1 path
                 target_x = x_pos - (distance - X)
                 target_y = y_pos
                 yaw = 1.57
-            elif current_path_index == 1:  # 1-2路径
+            elif current_path_index == 1:  # 1-2 path
                 target_x = x_pos
                 target_y = y_pos - (distance - X)
                 yaw = -3.14
-            elif current_path_index == 2:  # 2-3路径
+            elif current_path_index == 2:  # 2-3 path
                 target_x = x_pos + (distance - X)
                 target_y = y_pos
                 yaw = -1.57
-            elif current_path_index == 3:  # 3-4路径
+            elif current_path_index == 3:  # 3-4 path
                 target_x = x_pos
                 target_y = y_pos + (distance - X)
                 yaw = 0
                 
             rospy.loginfo(f"Calculating block position to navigate: x={target_x}, y={target_y}, yaw={yaw}")
 
-            # 导航到计算出的方块位置
+            # Navigate to calculated box position
             navigate_to_block(target_x, target_y, yaw)
             stop_at_next_point = True
             
@@ -91,7 +90,7 @@ def stop_callback(msg):
 
         
 def navigate_to_block(x, y, yaw):
-    """导航到计算出的目标方块位置，并输出日志信息"""
+    """Navigate to calculated box position，output log info"""
     quaternion = quaternion_from_euler(0, 0, yaw)
     goal_pose = PoseStamped()
     goal_pose.header.frame_id = 'map'
@@ -112,7 +111,7 @@ def navigate_to_block(x, y, yaw):
         rospy.loginfo("Failed to reach the block.")
    
 def navigate_to_point(x, y, yaw):
-    """导航到预定路径点，并输出日志信息"""
+    """Navigate to point, output log info"""
     quaternion = quaternion_from_euler(0, 0, yaw)
     goal_pose = PoseStamped()
     goal_pose.header.frame_id = 'map'
@@ -138,35 +137,34 @@ def navigate_to_point(x, y, yaw):
     #current_pose = msg.pose.pose
     
     
-# 订阅停止话题
+# Stop subscriber
 rospy.Subscriber('/signal', String, stop_callback)
 
 navigate_to_point(points[0]['x'], points[0]['y'], points[0]['yaw'])
 rospy.sleep(0.5)
 
-# 位置校正
-#current_pose = None  # 用于存储当前机器人的位置和姿态信息
+
+#current_pose = None  # current pose
 #rospy.Subscriber("/odometry/filtered", String, odom_callback)
 
     
-# 定义目标点的位置和朝向
+# Define goal pose
 for idx, (start, end) in enumerate(paths):
     current_path_index = idx
-    # 只在开始时启动图像处理脚本
     if idx == 0 and image_process_proc is None:
         image_process_path = os.path.join(os.path.dirname(__file__), 'image_process.py')
         image_process_proc = subprocess.Popen(['python3', image_process_path])
         
-    # 导航到预定路径点并输出日志
+    # Navigate to point and output log info
     rospy.sleep(0.5)
     navigate_to_point(points[end]['x'], points[end]['y'], points[end]['yaw'])
-    rospy.sleep(0.5)  # 稍微延迟，确保日志信息的输出有序
+    rospy.sleep(0.5)  
     if stop_at_next_point:
         rospy.loginfo("Detected object, stopped to calculate block position")
-        break  # 检测到物体后，跳出循环
+        break  
     
 
-# 关闭节点时同时关闭子进程
+# Shutdown
 def shutdown_hook():
     rospy.loginfo("Shutting down...")
     if image_process_proc:
