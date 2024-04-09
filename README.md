@@ -102,7 +102,7 @@ rosbag record /gazebo/ground_truth/state /Odometry -o EVO_perform.bag
 #Using EVO to evaluate the mapping performence 
 evo_ape bag EVO_perform.bag /gazebo/ground_truth/state /Odometry -r full -va --plot --plot_mode xy
 
-<img src="EVO/EVO.png" width="500" alt="evo"/>
+<img src="media/EVO.png" width="500" alt="evo"/>
 
 
 
@@ -129,7 +129,7 @@ Click "Assembly Line 2" or "Vehicle 3", you a seen a planned global and local pa
 <img src="media/gloabal-Astar.png" width="500" alt="naviagation_by_Astar"/>
 
 Click "Box 2", you can seen Jackal move to a preset point and start object tracking
-<img src="media/none" width="500" alt="object tracking"/>
+<img src="media/object_recognition.png" width="500" alt="object tracking"/>
 
 <h2 id="4"> Acknowledge</h2>
 
